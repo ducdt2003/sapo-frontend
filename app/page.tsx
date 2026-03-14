@@ -11,15 +11,19 @@ export default function Home() {
   
 
   useEffect(() => {
-    axios
+  fetchData();
+  }, []);
+
+  const fetchData = () => {
+     axios
       .get("http://localhost:9092/api/flash-sale/products")
       .then((res) => {
-        setProducts(res.data.content);
+        setProducts(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }
 
   const handleQuantityChange = (productId, value) => {
     console.log("change input", value)
@@ -30,19 +34,18 @@ export default function Home() {
   };
 
   const handleBuyProduct = async (productId) => {
-    console.log("quantities", quantities);
-    
     try {
     const quantity = Number(quantities[productId]);
-
       const response = await axios.post(
         "http://localhost:9092/api/flash-sale/order",
         {
           productId,
-          userId: 57,
+          userId: 2,
           quantity,
         },
       );
+
+      fetchData();
 
       setMessage(response.data.message);
     } catch (error) {
@@ -59,7 +62,7 @@ export default function Home() {
       <h1>🔥 Flash Sale Hôm Nay</h1>
 
       <div className="container">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div key={product.id} className="card">
             <h3>{product.name}</h3>
 
