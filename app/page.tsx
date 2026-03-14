@@ -8,14 +8,12 @@ export default function Home() {
   const [quantities, setQuantities] = useState({});
   const [message, setMessage] = useState("");
 
-  
-
   useEffect(() => {
-  fetchData();
+    fetchData();
   }, []);
 
   const fetchData = () => {
-     axios
+    axios
       .get("http://localhost:9092/api/flash-sale/products")
       .then((res) => {
         setProducts(res.data);
@@ -23,10 +21,10 @@ export default function Home() {
       .catch((err) => {
         console.error(err);
       });
-  }
+  };
 
   const handleQuantityChange = (productId, value) => {
-    console.log("change input", value)
+    console.log("change input", value);
     setQuantities({
       ...quantities,
       [productId]: value,
@@ -35,7 +33,7 @@ export default function Home() {
 
   const handleBuyProduct = async (productId) => {
     try {
-    const quantity = Number(quantities[productId]);
+      const quantity = Number(quantities[productId]);
       const response = await axios.post(
         "http://localhost:9092/api/flash-sale/order",
         {
@@ -67,13 +65,9 @@ export default function Home() {
             <h3>{product.name}</h3>
 
             <div className="price-box">
-              <span className="original-price">
-                {product.originalPrice} đ
-              </span>
+              <span className="original-price">{product.originalPrice} đ</span>
 
-              <span className="flash-price">
-                {product.flashSalePrice} đ
-              </span>
+              <span className="flash-price">{product.flashSalePrice} đ</span>
             </div>
 
             <p className="stock-info">Chỉ còn: {product.stock} sản phẩm</p>
